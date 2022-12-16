@@ -4,11 +4,13 @@ $cat=new Cat('小花','黑白');
 echo $cat->getType();
 echo $cat->getName();
 echo $cat->getColor();
+$cat->hide();
 
 $dog=new Dog('普魯斯','黑色');
 echo $dog->getType();
 echo $dog->getName();
 echo $dog->getColor();
+$dog->eat();
 
 class Animal{
     protected $type='animal';
@@ -57,6 +59,9 @@ class Cat extends Animal{
         $this->hair_color=$color;
         $this->type='貓';
     }
+    public function hide(){
+        echo "很會躲";
+    }
 
 }
 class Dog extends Animal{
@@ -69,6 +74,9 @@ class Dog extends Animal{
         $this->type='狗';
     }
 
+    public function eat(){
+        echo "很會吃";
+    }
 }
 
 ?>
