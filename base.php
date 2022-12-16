@@ -3,10 +3,12 @@
 $Student=new DB('students');
 
 //var_dump($Student);
+$john=$Student->find(30);
+echo $john['name'];
 
-$stus=$Student->all();
+$stus=$Student->all(['dept'=>3]);
 foreach($stus as $stu){
-    echo $stu['parents'];
+    echo $stu['parents'] . "=>".$stu['dept'];
     echo "<br>";
 }
 
@@ -23,7 +25,7 @@ class DB{
     }
 
 
-    public function all(...$arg){
+    public function all(...$args){
 /*
   原本函式all()的內容
 global $pdo;
@@ -80,6 +82,26 @@ global $pdo;
                 ->fetchAll(PDO::FETCH_ASSOC);
 
     }
+
+
+    function find($id){
+        $sql="select * from `$this->table` ";
+
+        if(is_array($id)){
+            foreach($id as $key => $value){
+                $tmp[]="`$key`='$value'";
+            }
+    
+            $sql = $sql . " where " . join(" && ",$tmp);
+    
+        }else{
+    
+            $sql=$sql . " where `id`='$id'";
+        }
+        //echo $sql;
+        return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+    }
+
 
 }
 
