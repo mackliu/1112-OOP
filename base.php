@@ -1,11 +1,20 @@
 <?php 
 
 $Student=new DB('students');
+$Dept=new DB('dept');
+
+echo $Dept->find(2)->name;
 
 //var_dump($Student);
 $john=$Student->find(30);
-echo $john['name'];
+echo is_object($john);
+echo "<pre>";
+print_r($john);
+echo "</pre>";
+echo $john->name;
+echo $john->parents;
 
+echo "<br>";
 $stus=$Student->all(['dept'=>3]);
 foreach($stus as $stu){
     echo $stu['parents'] . "=>".$stu['dept'];
@@ -76,11 +85,10 @@ global $pdo;
         $sql = $sql . $args[1];
     }
 
-    echo $sql;
+    echo $sql;      
     return $this->pdo
                 ->query($sql)
                 ->fetchAll(PDO::FETCH_ASSOC);
-
     }
 
 
@@ -99,7 +107,14 @@ global $pdo;
             $sql=$sql . " where `id`='$id'";
         }
         //echo $sql;
-        return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+        $row= $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+        $data=new stdClass;
+
+        foreach($row as $col => $value){
+          $data->{$col}=$value;
+        }
+        
+          return $data;
     }
 
 
