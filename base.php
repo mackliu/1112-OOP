@@ -21,8 +21,8 @@ foreach($stus as $stu){
 echo "<hr>"; */
 //更新資料
 //$Student->save(['name'=>'張大同','dept'=>2,'uni_id'=>"H22211223",'id'=>3]);
-$stu=$Student->find(['uni_id'=>"C200000058"]);
-dd($stu);
+/* $stu=$Student->find(['uni_id'=>"C200000058"]);
+print_r($stu); */
 //$stu['name']="陳秋桂";
 //$Student->save($stu);
 
@@ -49,6 +49,9 @@ echo "<hr>";
 echo "dept為2的資料筆數:".$Student->count(['dept'=>2]);
 echo "<hr>"; */
 
+
+/* $rows=q("select * from `dept` order by id desc");
+dd($rows); */
 
 class DB{
     protected $table;
@@ -228,6 +231,19 @@ function dd($array){
     echo "<pre>";
     print_r($array);
     echo "</pre>";
+}
+
+//萬用sql函式
+function q($sql){
+    $dsn="mysql:host=localhost;charset=utf8;dbname=school";
+    $pdo=new PDO($dsn,'root','');
+    //echo $sql;
+    return $pdo->query($sql)->fetchAll();
+}
+
+//header函式
+function to($location){
+    header("location:$location");
 }
 
 ?>
