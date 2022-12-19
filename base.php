@@ -108,12 +108,20 @@ global $pdo;
         }
         //echo $sql;
         $row= $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+        
+        echo "<pre>";
+        print_r($row);
+        echo "</pre>";
         $data=new stdClass;
-
+        //$data= $this->pdo->query($sql)->fetch(PDO::FETCH_OBJ);
         foreach($row as $col => $value){
           $data->{$col}=$value;
         }
         
+        echo "<pre>";
+        print_r($data);
+        echo "</pre>";
+
           return $data;
     }
 
