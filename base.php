@@ -59,33 +59,6 @@ class DB{
 
 
     public function all(...$args){
-/*
-  原本函式all()的內容
-global $pdo;
-    $sql="select * from $table ";
-
-    if(isset($args[0])){
-        if(is_array($args[0])){
-            //是陣列 ['acc'=>'mack','pw'=>'1234'];
-            //是陣列 ['product'=>'PC','price'=>'10000'];
-
-            foreach($args[0] as $key => $value){
-                $tmp[]="`$key`='$value'";
-            }
-
-            $sql=$sql ." WHERE ". join(" && " ,$tmp);
-        }else{
-            //是字串
-            $sql=$sql . $args[0];
-        }
-    }
-
-    if(isset($args[1])){
-        $sql = $sql . $args[1];
-    }
-
-    //echo $sql;
-    return $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC); */
 
     $sql="select * from $this->table ";
 
@@ -217,38 +190,23 @@ global $pdo;
         echo $sql;
         return $this->pdo->query($sql)->fetchColumn();
     }
+
     function max($col,...$arg){
-        if(isset($arg[0])){
-            foreach($arg[0] as $key => $value){
-                $tmp[]="`$key`='$value'";
-            }
-            $sql="select max($col) from $this->table where ";
-            $sql.=join(" && ",$tmp);
-        }else{
-
-            $sql="select max($col) from $this->table";
-        }
+        $sql=$this->mathSql('max',$col,$arg);
 
         echo $sql;
         return $this->pdo->query($sql)->fetchColumn();
     }
+
     function min($col,...$arg){
-        if(isset($arg[0])){
-            foreach($arg[0] as $key => $value){
-                $tmp[]="`$key`='$value'";
-            }
-            $sql="select min($col) from $this->table where ";
-            $sql.=join(" && ",$tmp);
-        }else{
-
-            $sql="select min($col) from $this->table";
-        }
+        $sql=$this->mathSql('min',$col,$arg);;
 
         echo $sql;
         return $this->pdo->query($sql)->fetchColumn();
     }
+
     function avg($col,...$arg){
-        if(isset($arg[0])){
+        /* if(isset($arg[0])){
             foreach($arg[0] as $key => $value){
                 $tmp[]="`$key`='$value'";
             }
@@ -257,10 +215,28 @@ global $pdo;
         }else{
 
             $sql="select avg($col) from $this->table";
-        }
+        } */
+
+        //dd($arg);
+        $sql=$this->mathSql('avg',$col,$arg);
 
         echo $sql;
         return $this->pdo->query($sql)->fetchColumn();
+    }
+
+    private function mathSql($math,$col,...$arg){
+        if(isset($arg[0][0])){
+            foreach($arg[0][0] as $key => $value){
+                $tmp[]="`$key`='$value'";
+            }
+            $sql="select $math($col) from $this->table where ";
+            $sql.=join(" && ",$tmp);
+        }else{
+
+            $sql="select $math($col) from $this->table";
+        }
+
+        return $sql;
     }
 
 }
