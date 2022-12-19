@@ -18,6 +18,13 @@ foreach($stus as $stu){
 //新增資料
 $Student->save(['name'=>'張大同','dept'=>2,'uni_id'=>"H22211223"]);
 
+echo "<hr>";
+//更新資料
+$Student->save(['name'=>'張大同','dept'=>2,'uni_id'=>"H22211223",'id'=>3]);
+$stu=$Student->find(15);
+dd($stu);
+$stu['name']="陳秋桂";
+$Student->save($stu);
 class DB{
     protected $table;
     protected $dsn="mysql:host=localhost;charset=utf8;dbname=school";
@@ -131,6 +138,19 @@ global $pdo;
     function save($array){
         if(isset($array['id'])){
             //更新update
+            foreach($array as $key => $value){
+              /*if($key!='id'){
+                    $tmp[]="`$key`='$value'";
+                } */
+                if($key!='id'){
+                    $tmp[]="`$key`='$value'";
+                }
+            }
+
+            $sql ="update $this->table set ";
+            $sql .=join(",",$tmp);
+            $sql .=" where `id`='{$array['id']}'";
+
         }else{
             //新增insert
             $cols=array_keys($array);
@@ -138,9 +158,10 @@ global $pdo;
             $sql="insert into $this->table (`" . join("`,`",$cols) . "`) 
                                      values('" . join("','",$array) . "')";
 
-            echo $sql;
-            //return $this->pdo->exec($sql);
         }
+
+            //echo $sql;
+            return $this->pdo->exec($sql);
 
     }
 
