@@ -16,15 +16,25 @@ foreach($stus as $stu){
 } */
 
 //新增資料
-$Student->save(['name'=>'張大同','dept'=>2,'uni_id'=>"H22211223"]);
+/* $Student->save(['name'=>'張大同','dept'=>2,'uni_id'=>"H22211223"]);
 
-echo "<hr>";
+echo "<hr>"; */
 //更新資料
-$Student->save(['name'=>'張大同','dept'=>2,'uni_id'=>"H22211223",'id'=>3]);
+/* $Student->save(['name'=>'張大同','dept'=>2,'uni_id'=>"H22211223",'id'=>3]);
 $stu=$Student->find(15);
 dd($stu);
 $stu['name']="陳秋桂";
-$Student->save($stu);
+$Student->save($stu); */
+
+//數學函式
+/*count
+sum
+max
+min
+avg
+*/
+echo $Student->count(['dept'=>2]);
+
 class DB{
     protected $table;
     protected $dsn="mysql:host=localhost;charset=utf8;dbname=school";
@@ -163,6 +173,22 @@ global $pdo;
             //echo $sql;
             return $this->pdo->exec($sql);
 
+    }
+
+    function count($arg){
+        if(is_array($arg)){
+            foreach($arg as $key => $value){
+                $tmp[]="`$key`='$value'";
+            }
+            $sql="select count(*) from $this->table where ";
+            $sql.=join(" && ",$tmp);
+        }else{
+
+            $sql="select count($arg) from $this->table";
+        }
+
+        echo $sql;
+        return $this->pdo->query($sql)->fetchColumn();
     }
 
 }
