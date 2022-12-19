@@ -34,9 +34,18 @@ min
 avg
 */
 //echo $Student->count(['dept'=>2]);
-echo  $Student->sum('graduate_at');
+/* echo  $Student->sum('graduate_at');
 echo "<hr>";
-echo  $Student->sum('graduate_at',['dept'=>2]);
+echo  $Student->sum("graduate_at",['dept'=>2]); */
+$Score=new DB("student_scores");
+echo $Score->max('score');
+echo "<hr>";
+echo $Score->min('score');
+echo "<hr>";
+echo $Score->avg('score');
+echo "<hr>";
+
+
 class DB{
     protected $table;
     protected $dsn="mysql:host=localhost;charset=utf8;dbname=school";
@@ -203,6 +212,51 @@ global $pdo;
         }else{
 
             $sql="select sum($col) from $this->table";
+        }
+
+        echo $sql;
+        return $this->pdo->query($sql)->fetchColumn();
+    }
+    function max($col,...$arg){
+        if(isset($arg[0])){
+            foreach($arg[0] as $key => $value){
+                $tmp[]="`$key`='$value'";
+            }
+            $sql="select max($col) from $this->table where ";
+            $sql.=join(" && ",$tmp);
+        }else{
+
+            $sql="select max($col) from $this->table";
+        }
+
+        echo $sql;
+        return $this->pdo->query($sql)->fetchColumn();
+    }
+    function min($col,...$arg){
+        if(isset($arg[0])){
+            foreach($arg[0] as $key => $value){
+                $tmp[]="`$key`='$value'";
+            }
+            $sql="select min($col) from $this->table where ";
+            $sql.=join(" && ",$tmp);
+        }else{
+
+            $sql="select min($col) from $this->table";
+        }
+
+        echo $sql;
+        return $this->pdo->query($sql)->fetchColumn();
+    }
+    function avg($col,...$arg){
+        if(isset($arg[0])){
+            foreach($arg[0] as $key => $value){
+                $tmp[]="`$key`='$value'";
+            }
+            $sql="select avg($col) from $this->table where ";
+            $sql.=join(" && ",$tmp);
+        }else{
+
+            $sql="select avg($col) from $this->table";
         }
 
         echo $sql;
