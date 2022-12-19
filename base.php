@@ -33,8 +33,10 @@ max
 min
 avg
 */
-echo $Student->count(['dept'=>2]);
-
+//echo $Student->count(['dept'=>2]);
+echo  $Student->sum('graduate_at');
+echo "<hr>";
+echo  $Student->sum('graduate_at',['dept'=>2]);
 class DB{
     protected $table;
     protected $dsn="mysql:host=localhost;charset=utf8;dbname=school";
@@ -185,6 +187,22 @@ global $pdo;
         }else{
 
             $sql="select count($arg) from $this->table";
+        }
+
+        echo $sql;
+        return $this->pdo->query($sql)->fetchColumn();
+    }
+
+    function sum($col,...$arg){
+        if(isset($arg[0])){
+            foreach($arg[0] as $key => $value){
+                $tmp[]="`$key`='$value'";
+            }
+            $sql="select sum($col) from $this->table where ";
+            $sql.=join(" && ",$tmp);
+        }else{
+
+            $sql="select sum($col) from $this->table";
         }
 
         echo $sql;
