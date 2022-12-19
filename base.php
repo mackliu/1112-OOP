@@ -15,6 +15,8 @@ foreach($stus as $stu){
     echo "<br>";
 } */
 
+//新增資料
+$Student->save(['name'=>'張大同','dept'=>2,'uni_id'=>"H22211223"]);
 
 class DB{
     protected $table;
@@ -123,6 +125,22 @@ global $pdo;
 
         echo $sql;
         return $this->pdo->exec($sql);
+
+    }
+
+    function save($array){
+        if(isset($array['id'])){
+            //更新update
+        }else{
+            //新增insert
+            $cols=array_keys($array);
+        
+            $sql="insert into $this->table (`" . join("`,`",$cols) . "`) 
+                                     values('" . join("','",$array) . "')";
+
+            echo $sql;
+            //return $this->pdo->exec($sql);
+        }
 
     }
 
