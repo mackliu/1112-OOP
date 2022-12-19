@@ -44,6 +44,10 @@ echo $Score->min('score');
 echo "<hr>";
 echo $Score->avg('score');
 echo "<hr>";
+echo "整張資料表筆數：".$Student->count();
+echo "<hr>";
+echo "dept為2的資料筆數:".$Student->count(['dept'=>2]);
+echo "<hr>";
 
 
 class DB{
@@ -159,68 +163,38 @@ class DB{
 
     }
 
-    function count($arg){
-        if(is_array($arg)){
-            foreach($arg as $key => $value){
-                $tmp[]="`$key`='$value'";
-            }
-            $sql="select count(*) from $this->table where ";
-            $sql.=join(" && ",$tmp);
-        }else{
+    function count(...$arg){
 
-            $sql="select count($arg) from $this->table";
-        }
-
-        echo $sql;
+        $sql=$this->mathSql('count','*',$arg);
+        //echo $sql;
         return $this->pdo->query($sql)->fetchColumn();
     }
 
     function sum($col,...$arg){
-        if(isset($arg[0])){
-            foreach($arg[0] as $key => $value){
-                $tmp[]="`$key`='$value'";
-            }
-            $sql="select sum($col) from $this->table where ";
-            $sql.=join(" && ",$tmp);
-        }else{
-
-            $sql="select sum($col) from $this->table";
-        }
-
-        echo $sql;
+        $sql=$this->mathSql('sum',$col,$arg);
+       // echo $sql;
         return $this->pdo->query($sql)->fetchColumn();
     }
 
     function max($col,...$arg){
         $sql=$this->mathSql('max',$col,$arg);
 
-        echo $sql;
+       // echo $sql;
         return $this->pdo->query($sql)->fetchColumn();
     }
 
     function min($col,...$arg){
         $sql=$this->mathSql('min',$col,$arg);;
 
-        echo $sql;
+        //echo $sql;
         return $this->pdo->query($sql)->fetchColumn();
     }
 
     function avg($col,...$arg){
-        /* if(isset($arg[0])){
-            foreach($arg[0] as $key => $value){
-                $tmp[]="`$key`='$value'";
-            }
-            $sql="select avg($col) from $this->table where ";
-            $sql.=join(" && ",$tmp);
-        }else{
 
-            $sql="select avg($col) from $this->table";
-        } */
-
-        //dd($arg);
         $sql=$this->mathSql('avg',$col,$arg);
 
-        echo $sql;
+       // echo $sql;
         return $this->pdo->query($sql)->fetchColumn();
     }
 
